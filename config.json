@@ -1,0 +1,9 @@
+{
+  "version": "v0.8.18",
+  "npm": true,
+  "main": "app.js",
+  "args": [],
+  "envs": {
+    "PORT": 80
+  }
+}
