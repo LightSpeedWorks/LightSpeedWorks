@@ -5,6 +5,7 @@ var divStatus = null; // ステータス
 var divResult = null; // 結果表示用
 var divResultEnvc = '';
 var divResultPagex = '';
+var currentPathname = '';
 
 function colorProgress(text) {
   return '<font color="gray">' + text + '</font>'
@@ -22,9 +23,14 @@ function windowOnLoad() {
 
   if (document.location.pathname === '/pagex') pagexOnClick(true);
   else if (document.location.pathname === '/envc') envcOnClick(true);
+  currentPathname = document.location.pathname;
 }
 
 function windowOnPopState(event) {
+//  if (!event || !event.state) {
+//    currentPathname = document.location.pathname;
+//    return;
+//  }
   if (! divStatus) divStatus = $("#status");
   if (! divResult) divResult = $("#result");
   divStatus.html(
@@ -44,6 +50,7 @@ function windowOnPopState(event) {
       else divResult.html(divResultEnvc);
     else if (document.location.pathname === '/') divResult.html('');
   }
+  currentPathname = document.location.pathname;
 }
 
 function pagexOnClick(skip) {
