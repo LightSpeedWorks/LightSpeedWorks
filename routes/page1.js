@@ -1,6 +1,6 @@
 // LightSpeedWorks
 // routes page1.js
-// ページ全体を更新
+// 繝壹�ｼ繧ｸ蜈ｨ菴薙ｒ譖ｴ譁ｰ
 
 /*
  * GET a page.
@@ -10,7 +10,7 @@ var util = require('util');
 
 exports.index = function (req, res){
   var options = {
-    title: 'LightSpeedWorks',
+    title: '蜈蛾溷ｷ･謌ｿ LightSpeedWorks',
     page:  req.url,
     req:   util.inspect(req, false, 1, false),
     proc:  util.inspect(process, false, 2, false)
@@ -21,6 +21,6 @@ exports.index = function (req, res){
   else if (req.url === '/page2') {
     return res.render('page1', options);
   }
-  options.title = 'LightSpeedWorks: pageX? ' + req.url;
+  options.title = '蜈蛾溷ｷ･謌ｿ LightSpeedWorks: pageX? ' + req.url;
   res.render('index', options);
 };

@@ -1,6 +1,6 @@
 // LightSpeedWorks
 // routes pagex.js
-// 1•”•ª‚ğXV
+// 1éƒ¨åˆ†ã‚’æ›´æ–°
 
 /*
  * GET pageX page.
@@ -10,7 +10,7 @@ var util = require('util');
 
 exports.index = function (req, res){
   var options = {
-    title: 'LightSpeedWorks:' + req.url,
+    title: 'å…‰é€Ÿå·¥æˆ¿ LightSpeedWorks:' + req.url,
     page:  req.url,
     req:   util.inspect(req, false, 1, false),
     proc:  util.inspect(process, false, 2, false)

@@ -7,5 +7,5 @@
  */
 
 exports.index = function (req, res){
-  res.render('index', { title: 'LightSpeedWorks' });
+  res.render('index', { title: '光速工房 LightSpeedWorks' });
 };
