@@ -21,8 +21,8 @@ function windowOnLoad() {
   divResult.html('')
   divStatus.html(colorComplete('初期化終了!'));
 
-  if (document.location.pathname === '/pagex') pagexOnClick(true);
-  else if (document.location.pathname === '/envc') envcOnClick(true);
+  if (document.location.pathname === '/test/pagex') pagexOnClick(true);
+  else if (document.location.pathname === '/test/envc') envcOnClick(true);
   currentPathname = document.location.pathname;
 }
 
@@ -38,24 +38,25 @@ function windowOnPopState(event) {
     'state: ' + JSON.stringify(event.state) + '</pre>');
 
   if (divResult.html() === '') {
-    if (document.location.pathname === '/pagex') pagexOnClick(true);
-    else if (document.location.pathname === '/envc') envcOnClick(true);
+    if (document.location.pathname === '/test/pagex') pagexOnClick(true);
+    else if (document.location.pathname === '/test/envc') envcOnClick(true);
   }
   else {
-    if (document.location.pathname === '/pagex')
+    if (document.location.pathname === '/test/pagex')
       if (divResultPagex === '') pagexOnClick(true);
       else divResult.html(divResultPagex);
-    else if (document.location.pathname === '/envc')
+    else if (document.location.pathname === '/test/envc')
       if (divResultPagex === '') envcOnClick(true);
       else divResult.html(divResultEnvc);
     else if (document.location.pathname === '/') divResult.html('');
+    else if (document.location.pathname === '/test') divResult.html('');
   }
   currentPathname = document.location.pathname;
 }
 
 function pagexOnClick(skip) {
   if (! skip)
-    window.history.pushState(null, 'pagex', '/pagex');
+    window.history.pushState(null, 'pagex', '/test/pagex');
 
   divStatus.html(colorProgress('読込中...'))
 
@@ -107,7 +108,7 @@ function getObjectToString(obj) {
 
 function envcOnClick(skip) {
   if (! skip)
-    window.history.pushState({page: '/envc'}, 'envc', '/envc');
+    window.history.pushState({page: '/test/envc'}, 'envc', '/test/envc');
 
   divStatus.html(colorProgress('読込中...'))
 
