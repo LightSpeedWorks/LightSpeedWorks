@@ -15,12 +15,12 @@ exports.index = function (req, res){
     req:   util.inspect(req, false, 1, false),
     proc:  util.inspect(process, false, 2, false)
   };
-  if (req.url === '/page1') {
+  if (req.url === '/test/page1') {
     return res.render('page1', options);
   }
-  else if (req.url === '/page2') {
+  else if (req.url === '/test/page2') {
     return res.render('page1', options);
   }
   options.title = '光速工房 LightSpeedWorks: pageX? ' + req.url;
-  res.render('index', options);
+  res.render('test', options);
 };

@@ -1,13 +1,17 @@
-// LightSpeedWorks
-// app.js
-// アプリケーション
+/**
+ * LightSpeedWorks
+ * app.js
+ * アプリケーション
+ */
 
 /**
+ * モジュール依存関係
  * Module dependencies.
  */
 
 var express = require('express');
 var routes = require('./routes');
+var test = require('./routes/test');
 var page1 = require('./routes/page1');
 var pagex = require('./routes/pagex');
 var user = require('./routes/user');
@@ -35,12 +39,13 @@ app.configure('development', function (){
 });
 
 app.get('/', routes.index);
-app.get('/pagex', routes.index);
-app.get('/envc',  routes.index);
-app.get('/page1', page1.index);
-app.get('/page2', page1.index);
-app.get('/html/pagex', pagex.index);
-app.get('/users', user.list);
+app.get('/test', test.index);
+app.get('/test/pagex', test.index);
+app.get('/test/envc',  test.index);
+app.get('/test/page1', page1.index);
+app.get('/test/page2', page1.index);
+app.get('/test/pagex.html', pagex.index);
+app.get('/test/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function (){
   console.log("Express server listening http://localhost:" + app.get('port'));
