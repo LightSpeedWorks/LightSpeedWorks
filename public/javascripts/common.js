@@ -60,7 +60,7 @@ function pagexOnClick(skip) {
 
   divStatus.html(colorProgress('読込中...'))
 
-  $.get('/html/pagex', /*{page: '/pagex'},*/ function (data) {
+  $.get('/test/pagex.html', /*{page: '/test/pagex.html'},*/ function (data) {
     divResult.html(data);
     divStatus.html('');
   });
@@ -130,7 +130,7 @@ function envcOnClick(skip) {
   data += getObjectToString(document.location);
   data += '\n</pre>\n';
 
-  data += '<h3>end of /envc</h3>\n';
+  data += '<h3>end of /test/envc</h3>\n';
 
   divResult.html(data);
   divStatus.html('');
