@@ -10,10 +10,10 @@ var util = require('util');
 
 exports.index = function (req, res){
   var options = {
-    title: '光速工房 LightSpeedWorks',
+    title: '光速工房 LightSpeedWorks', req: req, res: res, process: process,
     page:  req.url,
-    req:   util.inspect(req, false, 1, false),
-    proc:  util.inspect(process, false, 2, false)
+    reqText:   util.inspect(req, false, 1, false),
+    procText:  util.inspect(process, false, 2, false)
   };
   if (req.url === '/test/page1') {
     return res.render('page1', options);

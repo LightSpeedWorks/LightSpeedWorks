@@ -10,6 +10,7 @@
   <body>
     <h1><%= title + ': ' + page %></h1>
     <h2>Welcome to <%= title %></h2>
+    <p><%= req.app.startDateTime %></p>
     <a href="/">[home page]</a><br/>
     <a href="/test">[test page]</a><br/>
     <a href="/test/part">[part page]</a><br/>
@@ -20,12 +21,12 @@
 
     <h3>req:</h3>
     <pre>
-<%= req %>
+<%= reqText %>
     </pre>
 
     <h3>process:</h3>
     <pre>
-<%= proc %>
+<%= procText %>
     </pre>
 
     <a href="/">[home page]</a><br/>

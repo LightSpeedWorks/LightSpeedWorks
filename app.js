@@ -47,6 +47,12 @@ app.get('/test/page2', page1.index);
 app.get('/test/pagex.html', pagex.index);
 app.get('/test/users', user.list);
 
+// kazuaki add
+app.startDateTime = new Date();
+//var util = require('util');
+//console.log(util.inspect(app,false,2,true));
+console.log(app.startDateTime);
+
 http.createServer(app).listen(app.get('port'), function (){
   console.log("Express server listening http://localhost:" + app.get('port'));
 });

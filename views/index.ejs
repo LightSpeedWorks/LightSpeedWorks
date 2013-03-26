@@ -6,21 +6,22 @@
     <meta charset="UTF-8">
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-<!--
+
     <script src='/javascripts/jquery.min.js'></script>
     <script src='/javascripts/common.js'></script>
--->
+
   </head>
   <body>
     <h1><%= title %></h1>
     <h2><%= title %>へようこそ!</h2>
     <br/>
+    <p><%= req.app.startDateTime %></p>
     <p>2013/03/09 12:17 updated</p>
     <br/>
     <a href="/">[home page]</a><br/>
     <br/>
     <div id="result"></div>
-    <div id="status"><font color="gray">初期化中...</font></div>
+    <div id="status"><font color="gray">...</font></div>
     <div id="debug"></div>
   </body>
 </html>
