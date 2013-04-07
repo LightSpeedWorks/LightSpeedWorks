@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Language" content="ja">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8"> 
+<title>test jquery - 光速工房 LightSpeedWorks</title>
+<!--link rel="stylesheet" href="/stylesheets/style.css"/-->
+<script>protocol = location.protocol; if (protocol.substr(0,4) !== 'http') protocol = 'http:'
+document.write(unescape('%3Cscript type="text/javascript" src="' + protocol + '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"%3E%3C/script%3E'));</script>
+<!--script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script-->
+<!--script>window.jQuery || document.write(unescape('%3Cscript src="jquery-1.9.1.min.js"%3E%3C/script%3E'))</script-->
+<script charset="utf-8">
+// function windowOnLoad() { alert('windowOnLoad() is called.'); } window.onload = windowOnLoad;
+startTime = new Date();
+$(function ($) {
+  var result = $('#result');
+  result.text('initialized. (' + (new Date() - startTime)/1000.0 + 'sec)');
+
+  var resultText = $('#resultText');
+  resultText.text('requesting get text...');
+  $.get('http://graph.facebook.com/kazuaki.nishizawa', {}, function (str) {
+    resultText.html('<b><u>result of get text:</u></b> (' + (new Date() - startTime)/1000.0 + 'sec)');
+    resultText.append('<br/>' + str);
+  }, 'text');
+
+  var resultData = $('#resultData');
+  resultData.text('requesting get text...');
+  $.get('http://graph.facebook.com/kazuaki.nishizawa', function (data) {
+    resultData.html('<b><u>result of get data:</u></b> (' + (new Date() - startTime)/1000.0 + 'sec)');
+    if (typeof data === 'string')
+      resultData.append('<br/><b>type: ' + typeof data + '</b></br>' + data);
+    else if (typeof data === 'object') {
+      var str = '';
+      for (var key in data) {
+        str += '<br/>' + key + ': ' + data[key];
+      }
+      resultData.append('<br/><b>type: ' + typeof data + '</b></br>' + str);
+    }
+    else {
+      resultData.append('<br/><b>type: ' + typeof data + '</b></br>' + data);
+    }
+  });
+
+  var resultJSON = $('#resultJSON');
+  resultJSON.text('requesting getJSON ...');
+  $.getJSON('http://graph.facebook.com/kazuaki.nishizawa', function (json) {
+    resultJSON.html('<b><u>result of getJSON:</u></b> (' + (new Date() - startTime)/1000.0 + 'sec)');
+    var str = '';
+    for (var key in json) {
+      str += '<font color="gray">' + key + '</font>: <b>' +
+        json[key] + '</b> (' + JSON.stringify(json[key]) + ')<br/>';
+    }
+    str += '<br/>' + JSON.stringify(json);
+    resultJSON.after(str);
+  });
+});
+function selectUserOnChange() {
+  startTime = new Date();
+  var resultSelect = $('#resultSelect');
+  var selectUser = $('#selectUser');
+  resultSelect.append('<hr/><b>' + selectUser.val() + '</b>');
+  $.getJSON('http://graph.facebook.com/' + selectUser.val(), function (json) {
+    resultSelect.append('<br/><b><u>result of getJSON:</u></b> (' + (new Date() - startTime)/1000.0 + 'sec)');
+    var str = '';
+    for (var key in json) {
+      str += '<br/><font color="gray">' + key + '</font>: <b>' +
+        json[key] + '</b> (' + JSON.stringify(json[key]) + ')';
+    }
+    str += '<br/><br/>' + JSON.stringify(json);
+    resultSelect.append(str);
+  });
+}
+</script>
+</head>
+<body>
+<h1>jquery_get1.html</h1>
+<div id="resultSelect"><font color="gray"></font></div>
+<hr/>
+<select id="selectUser" onchange="selectUserOnChange()">
+<option value="kazuaki.nishizawa">kazuaki.nishizawa</option>
+<option value="zuck">zuck</option>
+</select>
+<hr/><div id="result"><font color="gray">loading...</font></div>
+<hr/><div id="resultText"><font color="gray">pending...</font></div>
+<hr/><div id="resultData"><font color="gray">pending...</font></div>
+<hr/><div id="resultJSON"><font color="gray">pending...</font></div>
+<hr/><div><a href="/">(&lt;&lt;&lt;)</a>/<a href="/test/">test</a>/<a href="/test/jquery/">jquery</a> -
+<a href="../">(&lt;&lt;)</a> - <a href="./">(&lt;)</a> -
+<a href="https://github.com/LightSpeedWorks/lightspeedworks.github.com/tree/master/test/jquery">(GitHub Source)</a></div>
+</body>
+</html>
