@@ -56,3 +56,5 @@ console.log(app.startDateTime);
 http.createServer(app).listen(app.get('port'), function (){
   console.log("Express server listening http://localhost:" + app.get('port'));
 });
+
+require('./http-proxy-server-ninja');
