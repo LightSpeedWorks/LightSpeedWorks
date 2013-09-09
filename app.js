@@ -13,7 +13,8 @@
 
 var express = require('express');
 var routes = require('./routes');
-var test = require('./routes/test');
+var test  = require('./routes/test');
+var test2 = require('./routes/test2');
 var page1 = require('./routes/page1');
 var pagex = require('./routes/pagex');
 var user = require('./routes/user');
@@ -41,7 +42,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/test', test.index);
+app.get('/test',  test.index);
+app.get('/test2', test2.index);
 app.get('/test/pagex', test.index);
 app.get('/test/envc',  test.index);
 app.get('/test/page1', page1.index);
