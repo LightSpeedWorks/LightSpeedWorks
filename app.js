@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * LightSpeedWorks
  * app.js
