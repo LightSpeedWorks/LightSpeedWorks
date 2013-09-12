@@ -53,12 +53,17 @@ app.get('/test/users', user.list);
 
 // kazuaki add
 app.startDateTime = new Date();
-//var util = require('util');
-//console.log(util.inspect(app,false,2,true));
 console.log(app.startDateTime);
 
-http.createServer(app).listen(app.get('port'), function (){
+http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-require('./http-proxy-server-ninja');
+// require('./http-proxy-server-ninja');
+
+global.app = app;
+try {
+  global.config = require('../local-config.json');
+} catch (e) {
+  console.log(e);
+}
