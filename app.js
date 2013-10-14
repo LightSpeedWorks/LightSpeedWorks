@@ -99,3 +99,4 @@ app.startDateTime = new Date();
 
 global.app = app;
 global.clog = clog;
+
