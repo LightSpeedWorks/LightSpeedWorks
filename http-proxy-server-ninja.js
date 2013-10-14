@@ -2,11 +2,11 @@
 
 'use strict';
 
-// Application name. {アプリケーション名}
+// Application name. {繧｢繝励Μ繧ｱ繝ｼ繧ｷ繝ｧ繝ｳ蜷閤
 var APP_NAME = 'LightSpeedWorks';
 
 //######################################################################
-// clog - console log. {コンソールログ}
+// clog - console log. {繧ｳ繝ｳ繧ｽ繝ｼ繝ｫ繝ｭ繧ｰ}
 function clog() {
   var util = require('util');
   console.log(tm() + util.format.apply(util, arguments));
@@ -16,7 +16,7 @@ function clog() {
 }
 
 //######################################################################
-// CONFIG - config file. {設定ファイル}
+// CONFIG - config file. {險ｭ螳壹ヵ繧｡繧､繝ｫ}
 if (typeof CONFIG === 'undefined') {
   // CONFIG - config file.
   global.CONFIG = {};
@@ -28,7 +28,7 @@ if (typeof CONFIG === 'undefined') {
 }
 
 //######################################################################
-// cluster fork. {クラスタ分割対応}
+// cluster fork. {繧ｯ繝ｩ繧ｹ繧ｿ蛻�蜑ｲ蟇ｾ蠢怡
 var cluster = require('cluster');
 var numWorkers = 1; //require('os').cpus().length;
 if (numWorkers > 1 && cluster.isMaster) {
