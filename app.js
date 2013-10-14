@@ -1,11 +1,49 @@
+// LightSpeedWorks app.js
+
 'use strict';
 
-/**
- * LightSpeedWorks
- * app.js
- * アプリケーション
- */
+// Application name. {アプリケーション名}
+var APP_NAME = 'LightSpeedWorks';
 
+//######################################################################
+// clog - console log. {コンソールログ}
+function clog() {
+  var util = require('util');
+  console.log(tm() + util.format.apply(util, arguments));
+  function tm() {
+    return new Date(new Date() - 0 + 9000 * 3600).toISOString().replace(/T|Z/g, ' ')
+  }
+}
+
+//######################################################################
+// CONFIG - config file. {設定ファイル}
+if (typeof CONFIG === 'undefined') {
+  // CONFIG - config file.
+  global.CONFIG = {};
+  try {
+    CONFIG = require('../' + APP_NAME + '.json');
+  } catch (e) {
+    clog(e);
+  }
+}
+
+//######################################################################
+// cluster fork. {クラスタ分割対応}
+var cluster = require('cluster');
+var numWorkers = 1; //require('os').cpus().length;
+if (numWorkers > 1 && cluster.isMaster) {
+  // master
+  clog('app master: numWorkers: ' + numWorkers);
+  for (var i = 0; i < numWorkers; i++)
+    cluster.fork();
+  cluster.on('death', function onDeath(worker) {
+    clog('app worker ' + worker.pid + ' died');
+  });
+  return;
+}
+clog('app worker ' + process.pid + ' started');
+
+//######################################################################
 /**
  * モジュール依存関係
  * Module dependencies.
@@ -24,7 +62,7 @@ var path = require('path');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', CONFIG.port || process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -51,19 +89,13 @@ app.get('/test/page2', page1.index);
 app.get('/test/pagex.html', pagex.index);
 app.get('/test/users', user.list);
 
-// kazuaki add
-app.startDateTime = new Date();
-console.log(app.startDateTime);
-
 http.createServer(app).listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
+  clog(APP_NAME + ' Express server started on port ' + app.get('port'));
 });
 
-// require('./http-proxy-server-ninja');
+require('./http-proxy-server-ninja');
+
+app.startDateTime = new Date();
 
 global.app = app;
-try {
-  global.config = require('../local-config.json');
-} catch (e) {
-  console.log(e);
-}
+global.clog = clog;

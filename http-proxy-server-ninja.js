@@ -1,36 +1,65 @@
-(function () { 'use strict';
+// http-proxy-server-ninja
+
+'use strict';
+
+// Application name. {アプリケーション名}
+var APP_NAME = 'LightSpeedWorks';
+
+//######################################################################
+// clog - console log. {コンソールログ}
+function clog() {
+  var util = require('util');
+  console.log(tm() + util.format.apply(util, arguments));
+  function tm() {
+    return new Date(new Date() - 0 + 9000 * 3600).toISOString().replace(/T|Z/g, ' ')
+  }
+}
+
+//######################################################################
+// CONFIG - config file. {設定ファイル}
+if (typeof CONFIG === 'undefined') {
+  // CONFIG - config file.
+  global.CONFIG = {};
+  try {
+    CONFIG = require('../' + APP_NAME + '.json');
+  } catch (e) {
+    clog(e);
+  }
+}
+
+//######################################################################
+// cluster fork. {クラスタ分割対応}
+var cluster = require('cluster');
+var numWorkers = 1; //require('os').cpus().length;
+if (numWorkers > 1 && cluster.isMaster) {
+  // master
+  clog('proxy master: numWorkers: ' + numWorkers);
+  for (var i = 0; i < numWorkers; i++)
+    cluster.fork();
+  cluster.on('death', function onDeath(worker) {
+    clog('proxy worker ' + worker.pid + ' died');
+  });
+  return;
+}
+clog('proxy worker ' + process.pid + ' started');
+
+//######################################################################
+var HTTP_PORT = CONFIG.proxy_port || 8080;
 
 var http = require('http');
 var url  = require('url');
 var net  = require('net');
 
-var HTTP_PORT = 8080;
-
-var log = console.log.bind(console);
-var connCount = 0;
-
-function tm() { return new Date().toLocaleTimeString(); }
-
 function printError(err, msg, url) {
-  log('%s %s: %s %s', tm(), msg, err, url);
+  clog('%s: %s %s', msg, err, url);
 }
 
-var cluster = require('cluster');
-var numWorkers = 1; //require('os').cpus().length;
-if (numWorkers > 1 && cluster.isMaster) {
-  // master
-  log(tm() + ' numWorkers: ' + numWorkers);
-  for (var i = 0; i < numWorkers; i++)
-    cluster.fork();
-  cluster.on('death', function onDeath(worker) {
-    log(tm() + ' worker ' + worker.pid + ' died');
-  });
-  return;
-}
+//######################################################################
+var connCount = 0;
 
 var server = http.createServer(function onCliReq(cliReq, cliRes) {
   var x = url.parse(cliReq.url);
-  //log('%s http  : (%d) %s%s', tm(), connCount,
+  //clog('http  : (%d) %s%s', connCount,
   //    x.hostname + ':' + (x.port || 80));
   var options = {host: x.hostname, port: x.port || 80, path: x.path,
                  method: cliReq.method, headers: cliReq.headers};
@@ -53,7 +82,7 @@ server.on('clientError', function onCliErr(err, cliSoc) {
 
 server.on('connect', function onCliConn(cliReq, cliSoc, cliHead) {
   var x = url.parse('https://' + cliReq.url);
-  //log('%s https : (%d) %s%s', tm(), connCount, cliReq.url);
+  //clog('https : (%d) %s%s', connCount, cliReq.url);
   var svrSoc = net.connect(x.port || 443, x.hostname, function onSvrConn() {
     cliSoc.write('HTTP/1.0 200 Connection established\r\n\r\n');
     if (cliHead && cliHead.length) svrSoc.write(cliHead);
@@ -71,7 +100,7 @@ server.on('connect', function onCliConn(cliReq, cliSoc, cliHead) {
 });
 
 server.listen(HTTP_PORT, function () {
-  log('http proxy server started on port ' + HTTP_PORT);
+  clog('http proxy server started on port ' + HTTP_PORT);
 });
 
 var whiteAddressList = [];
@@ -80,20 +109,18 @@ whiteAddressList['192.168.251.1'] = true;
 whiteAddressList['59.157.207.17'] = true;
 server.on('connection', function onConn(cliSoc) {
   if (cliSoc.remoteAddress in whiteAddressList) return;
-  log('%s reject: ', tm(), cliSoc.remoteAddress);
+  clog('reject: ', cliSoc.remoteAddress);
   cliSoc.destroy();
 });
 
 /*
 server.on('connection', function onConn(cliSoc) {
   var connTime = new Date();
-  log('%s ++conn: (%d) from: %s', tm(), (++connCount),
+  clog('++conn: (%d) from: %s', (++connCount),
       cliSoc.remoteAddress);
   cliSoc.on('close', function onDisconn() {
-    log('%s --conn: (%d) time: %s sec', tm(), (--connCount),
+    clog('--conn: (%d) time: %s sec', (--connCount),
         (new Date() - connTime) / 1000.0);
   });
 });
 */
-
-})();
