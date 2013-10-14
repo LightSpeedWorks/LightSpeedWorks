@@ -107,6 +107,7 @@ var whiteAddressList = [];
 whiteAddressList['127.0.0.1'] = true;
 whiteAddressList['192.168.251.1'] = true;
 whiteAddressList['59.157.207.17'] = true;
+whiteAddressList['210.170.211.28'] = true;
 server.on('connection', function onConn(cliSoc) {
   if (cliSoc.remoteAddress in whiteAddressList) return;
   clog('reject: ', cliSoc.remoteAddress);
