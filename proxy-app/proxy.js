@@ -1,4 +1,4 @@
-// http-proxy-server-ninja
+// proxy.js
 
 'use strict';
 

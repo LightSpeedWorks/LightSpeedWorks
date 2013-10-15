@@ -78,4 +78,4 @@ app.listen(app.get('port'), function () {
   clog('Server started on port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
 });
 
-require('./proxy-app/http-proxy-server-ninja');
+require('./proxy-app/proxy');
