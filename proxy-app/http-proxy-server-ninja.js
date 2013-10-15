@@ -2,46 +2,7 @@
 
 'use strict';
 
-// Application name. {アプリケーション名}
-var APP_NAME = 'LightSpeedWorks';
-
-//######################################################################
-// clog - console log. {コンソールログ}
-function clog() {
-  var util = require('util');
-  console.log(tm() + util.format.apply(util, arguments));
-  function tm() {
-    return new Date(new Date() - 0 + 9000 * 3600).toISOString().replace(/T|Z/g, ' ')
-  }
-}
-
-//######################################################################
-// CONFIG - config file. {設定ファイル}
-if (typeof CONFIG === 'undefined') {
-  // CONFIG - config file.
-  global.CONFIG = {};
-  try {
-    CONFIG = require('../../' + APP_NAME + '.json');
-  } catch (e) {
-    clog(e);
-  }
-}
-
-//######################################################################
-// cluster fork. {クラスタ分割対応}
-var cluster = require('cluster');
-var numWorkers = 1; //require('os').cpus().length;
-if (numWorkers > 1 && cluster.isMaster) {
-  // master
-  clog('master numWorkers:' + numWorkers + ' (proxy)');
-  for (var i = 0; i < numWorkers; i++)
-    cluster.fork();
-  cluster.on('death', function onDeath(worker) {
-    clog('worker pid:' + worker.pid + ' died (proxy)');
-  });
-  return;
-}
-clog('worker pid:' + process.pid + ' started (proxy)');
+// clog, CONFIG, APP_NAME, required
 
 //######################################################################
 var HTTP_PORT = CONFIG.proxy_port || 8080;
