@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Language" content="ja">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style-test.css' />
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/common.js'></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <h2><%= title %>へようこそ!</h2>
+    <p><%= req.app.startDateTime %></p>
+    <a href="/test">[test page]</a><br/>
+    <a href="/test/pagex" onclick="pagexOnClick(false); return false;">[page X]</a><br/>
+    <a href="/test/page1">[page 1]</a>
+    <a href="/test/page2">[page 2]</a>
+    <!--
+    <a href="/test/page1" onclick="page1OnClick(false); return false;">[page 1]</a>
+    <a href="/test/page2" onclick="page2OnClick(false); return false;">[page 2]</a>
+    -->
+    <br/>
+    <input type="button" id="pagexButton" onclick="pagexOnClick(false); return false;" value="pagex"/><br/>
+    <input type="button" id="envcButton" onclick="envcOnClick(false); return false;" value="envc"/><br/>
+    <div id="result"></div>
+    <div id="status"><font color="gray">初期化中...</font></div>
+    <div id="debug"></div>
+  </body>
+</html>

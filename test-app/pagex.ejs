@@ -1,0 +1,30 @@
+    <meta http-equiv="Content-Language" content="ja">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <h2>PageX:<%= ' ' + title %></h2>
+    <p><%= req.app.startDateTime %></p>
+
+page X - 1 - ひとつ<br/>
+page X - 2 - ふたつ<br/>
+page X - 3 - みっつ<br/>
+
+    <h3>req:</h3>
+    <pre>
+<%= reqText %>
+    </pre>
+
+    <h3>res:</h3>
+    <pre>
+<%= resText %>
+    </pre>
+
+    <h3>process:</h3>
+    <pre>
+<%= procText %>
+    </pre>
+
+    <a href="/test">[test page]</a><br/>
+    <a href="/test/page1">[test page 1]</a>
+    <a href="/test/page2">[test page 2]</a>
+    <br/>
+    ---- END OF PAGEX ----<br/>

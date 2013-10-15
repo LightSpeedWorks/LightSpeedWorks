@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Language" content="ja">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style-test.css' />
+
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/common.js'></script>
+
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <h2><%= title %>へようこそ!</h2>
+    <br/>
+    <p>start time: <%= req.app.startDateTime %></p>
+    <p>2013/09/08 23:25 updated</p>
+    <br/>
+    <a href="/">[home page]</a><br/>
+    <br/>
+    <div id="result"></div>
+    <div id="status"><font color="gray">...</font></div>
+    <div id="debug"></div>
+  </body>
+</html>
