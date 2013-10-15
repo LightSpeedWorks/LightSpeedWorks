@@ -1,4 +1,4 @@
-start http://localhost:3000/
-hotnode app
-node app
+set HERE=%~dp0
+hotnode %HERE%app
+node %HERE%app
 pause
