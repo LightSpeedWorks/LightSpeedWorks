@@ -4,7 +4,6 @@
   "main": "app.js",
   "args": [],
   "envs": {
-    "TZ": "Asia/Tokyo",
-    "PORT": 80
+    "TZ": "Asia/Tokyo"
   }
 }
