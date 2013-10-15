@@ -1,48 +1,6 @@
-// LightSpeedWorks app.js
+// test app.js
 
 'use strict';
-
-// Application name. {アプリケーション名}
-var APP_NAME = 'LightSpeedWorks';
-var APP_TITLE = '光速工房 LightSpeedWorks';
-
-//######################################################################
-// clog - console log. {コンソールログ}
-function clog() {
-  var util = require('util');
-  console.log(tm() + util.format.apply(util, arguments));
-  function tm() {
-    return new Date(new Date() - 0 + 9000 * 3600).toISOString().replace(/T|Z/g, ' ')
-  }
-}
-
-//######################################################################
-// CONFIG - config file. {設定ファイル}
-if (typeof CONFIG === 'undefined') {
-  // CONFIG - config file.
-  global.CONFIG = {};
-  try {
-    CONFIG = require('../../' + APP_NAME + '.json');
-  } catch (e) {
-    clog(e);
-  }
-}
-
-//######################################################################
-// cluster fork. {クラスタ分割対応}
-var cluster = require('cluster');
-var numWorkers = 1; //require('os').cpus().length;
-if (numWorkers > 1 && cluster.isMaster) {
-  // master
-  clog('master numWorkers:' + numWorkers + ' (app)');
-  for (var i = 0; i < numWorkers; i++)
-    cluster.fork();
-  cluster.on('death', function onDeath(worker) {
-    clog('worker pid:' + worker.pid + ' died (app)');
-  });
-  return;
-}
-clog('worker pid:' + process.pid + ' started (app)');
 
 //######################################################################
 /**
@@ -51,13 +9,12 @@ clog('worker pid:' + process.pid + ' started (app)');
  */
 
 var express = require('express');
-var http = require('http');
 var path = require('path');
 
 var app = express();
 
 // all environments
-app.set('port', CONFIG.port || process.env.PORT || 3000);
+app.set('port', CONFIG.port || 3000);
 app.set('views', __dirname);
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -136,13 +93,6 @@ app.get('/test/users', function (req, res){
   res.send('respond with a resource');
 });
 
-http.createServer(app).listen(app.get('port'), function () {
-  clog('Server started on port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
-});
-
-//require('./http-proxy-server-ninja');
-
 app.startDateTime = new Date();
 
-global.app = app;
-global.clog = clog;
+module.exports.app = app;
