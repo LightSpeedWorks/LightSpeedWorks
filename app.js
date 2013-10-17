@@ -56,13 +56,19 @@ var testApp =   require('./test-app/app.js').app;
 var localApp =  require('./local-app/app.js').app;
 var lightApp =  require('./light-app/app.js').app;
 var goobooApp = require('./gooboo-app/app.js').app;
+var appApp =    require('./app-app/app.js').app;
 
 app.set('port', CONFIG.port || process.env.PORT || 3000);
 
-app.use(express.vhost('localhost', localApp));
+app.use(express.vhost('localhost',               localApp));
 
 app.use(express.vhost('test.lightspeedworks.dev', testApp));
 app.use(express.vhost('test.lightspeedworks.com', testApp));
+
+app.use(express.vhost('app.lightspeedworks.dev', appApp));
+app.use(express.vhost('app.lightspeedworks.com', appApp));
+app.use(express.vhost('*.app.lightspeedworks.dev', appApp));
+app.use(express.vhost('*.app.lightspeedworks.com', appApp));
 
 app.use(express.vhost('www.lightspeedworks.dev', lightApp));
 app.use(express.vhost('www.lightspeedworks.com', lightApp));
