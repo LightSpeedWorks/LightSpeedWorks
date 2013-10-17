@@ -60,6 +60,28 @@ var appApp =    require('./app-app/app.js').app;
 
 app.set('port', CONFIG.port || process.env.PORT || 3000);
 
+var vhostApps = {
+  'localhost': localApp,
+  'test.lightspeedworks.dev': testApp,
+  'test.lightspeedworks.com': testApp,
+  'app.lightspeedworks.dev': appApp,
+  'app.lightspeedworks.com': appApp,
+  '*.app.lightspeedworks.dev': appApp,
+  '*.app.lightspeedworks.com': appApp,
+  'www.lightspeedworks.dev': lightApp,
+  'www.lightspeedworks.com': lightApp,
+  'lightspeedworks.dev': lightApp,
+  'lightspeedworks.com': lightApp,
+  'www.goo-boo.dev': goobooApp,
+  'www.goo-boo.com': goobooApp,
+  'goo-boo.dev': goobooApp,
+  'goo-boo.com': goobooApp,
+};
+
+for (var host in vhostApps)
+  app.use(express.vhost(host, vhostApps[host]));
+
+/*
 app.use(express.vhost('localhost',               localApp));
 
 app.use(express.vhost('test.lightspeedworks.dev', testApp));
@@ -76,9 +98,24 @@ app.use(express.vhost('lightspeedworks.dev',     lightApp));
 app.use(express.vhost('lightspeedworks.com',     lightApp));
 
 app.use(express.vhost('www.goo-boo.dev', goobooApp));
-app.use(express.vhost('goo-boo.dev',     goobooApp));
 app.use(express.vhost('www.goo-boo.com', goobooApp));
+app.use(express.vhost('goo-boo.dev',     goobooApp));
 app.use(express.vhost('goo-boo.com',     goobooApp));
+*/
+
+app.get('/*', redirect);
+
+function redirect(req, res, next) {
+  var host = req.headers.host;
+
+  if (vhostApps[host])
+    return next();
+
+  if (host.indexOf('app.lightspeedworks.') > 0)
+    return appApp(req, res, next);
+
+  lightApp(req, res, next);
+}
 
 app.listen(app.get('port'), function () {
   clog('Server started on port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
