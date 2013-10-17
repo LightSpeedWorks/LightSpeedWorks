@@ -28,21 +28,17 @@ if ('development' == app.get('env')) {
 }
 
 // index
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
   var name = req.headers.host;
   if (name.indexOf('.lightspeedworks.') > 0)
     name = name.slice(0, name.indexOf('.lightspeedworks.'));
 
   res.render('index', { title: 'Express (' + name + ')',
+    url:  req.url,
     name: name,
     host: req.headers.host,
     util: require('util'),
     hdrs: req.headers });
-});
-
-// users
-app.get('/users', function (req, res) {
-  res.send('respond with a resource');
 });
 
 module.exports.app = app;
