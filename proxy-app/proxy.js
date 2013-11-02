@@ -2,7 +2,7 @@
 
 'use strict';
 
-// clog, CONFIG, APP_NAME, required
+function proxy(clog, CONFIG, APP_NAME) {
 
 //######################################################################
 var HTTP_PORT = CONFIG.proxy_port || 8080;
@@ -86,3 +86,7 @@ server.on('connection', function onConn(cliSoc) {
   });
 });
 */
+
+}
+
+module.exports.proxy = proxy;

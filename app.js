@@ -9,6 +9,7 @@ var APP_TITLE = '光速工房 LightSpeedWorks';
 global.APP_NAME = APP_NAME;
 global.APP_TITLE = APP_TITLE;
 
+
 //######################################################################
 // global clog - console log. {コンソールログ}
 function clog() {
@@ -19,6 +20,7 @@ function clog() {
   }
 }
 global.clog = clog;
+
 
 //######################################################################
 // global CONFIG - config file. {設定ファイル}
@@ -31,6 +33,7 @@ if (typeof CONFIG === 'undefined') {
     clog(e);
   }
 }
+
 
 //######################################################################
 // cluster fork. {クラスタ分割対応}
@@ -48,20 +51,26 @@ if (numWorkers > 1 && cluster.isMaster) {
 }
 clog('worker pid:' + process.pid + ' started (app)');
 
+
 //######################################################################
+// express app
 var express = require('express'); 
 var app = express(); 
 
+// sub apps
 var testApp =   require('./test-app/app.js').app;
 var localApp =  require('./local-app/app.js').app;
 var lightApp =  require('./light-app/app.js').app;
 var goobooApp = require('./gooboo-app/app.js').app;
 var appApp =    require('./app-app/app.js').app;
 
+// port
 app.set('port', CONFIG.port || process.env.PORT || 3000);
 
+// vhostApps
 var vhostApps = {
   'localhost': localApp,
+  '127.0.0.1': localApp,
   'test.lightspeedworks.dev': testApp,
   'test.lightspeedworks.com': testApp,
   'app.lightspeedworks.dev': appApp,
@@ -81,30 +90,10 @@ var vhostApps = {
 for (var host in vhostApps)
   app.use(express.vhost(host, vhostApps[host]));
 
-/*
-app.use(express.vhost('localhost',               localApp));
-
-app.use(express.vhost('test.lightspeedworks.dev', testApp));
-app.use(express.vhost('test.lightspeedworks.com', testApp));
-
-app.use(express.vhost('app.lightspeedworks.dev', appApp));
-app.use(express.vhost('app.lightspeedworks.com', appApp));
-app.use(express.vhost('*.app.lightspeedworks.dev', appApp));
-app.use(express.vhost('*.app.lightspeedworks.com', appApp));
-
-app.use(express.vhost('www.lightspeedworks.dev', lightApp));
-app.use(express.vhost('www.lightspeedworks.com', lightApp));
-app.use(express.vhost('lightspeedworks.dev',     lightApp));
-app.use(express.vhost('lightspeedworks.com',     lightApp));
-
-app.use(express.vhost('www.goo-boo.dev', goobooApp));
-app.use(express.vhost('www.goo-boo.com', goobooApp));
-app.use(express.vhost('goo-boo.dev',     goobooApp));
-app.use(express.vhost('goo-boo.com',     goobooApp));
-*/
-
 app.get('/*', redirect);
+app.post('/*', redirect);
 
+// redirect
 function redirect(req, res, next) {
   var host = req.headers.host;
 
@@ -117,8 +106,10 @@ function redirect(req, res, next) {
   lightApp(req, res, next);
 }
 
+// listend
+clog('Server starting - port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
 app.listen(app.get('port'), function () {
   clog('Server started on port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
 });
 
-require('./proxy-app/proxy');
+require('./proxy-app/proxy').proxy(clog, CONFIG, APP_NAME);

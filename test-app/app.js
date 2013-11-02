@@ -32,10 +32,12 @@ if ('development' == app.get('env')) {
 }
 
 // index
-app.get('/', function index(req, res){
+app.get('/', index);
+
+function index(req, res){
   res.render('index', { title: APP_TITLE,
           req: req, res: res, process: process, util: util });
-});
+}
 
 app.get('/test',            test1);
 app.get('/test2',           test2);
@@ -68,8 +70,8 @@ function pagex(req, res) {
   var options = {
     title: APP_TITLE + ':' + req.url, req: req, res: res, process: process,
     page:  req.url,
-    reqText:   util.inspect(req, false, 1, false),
-    resText:   util.inspect(res, false, 1, false),
+    reqText:   util.inspect(req, false, 2, false),
+    resText:   util.inspect(res, false, 2, false),
     procText:  util.inspect(process, false, 2, false)
   };
   res.render('pagex', options);
@@ -89,9 +91,11 @@ function test2(req, res){
 }
 
 // users
-app.get('/test/users', function (req, res){
+app.get('/test/users', users);
+
+function users(req, res){
   res.send('respond with a resource');
-});
+}
 
 app.startDateTime = new Date();
 
