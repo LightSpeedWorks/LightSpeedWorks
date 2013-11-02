@@ -19,11 +19,25 @@ function printError(err, msg, url) {
 var connCount = 0;
 
 var server = http.createServer(function onCliReq(cliReq, cliRes) {
+  if ('proxy-connection' in cliReq.headers) {
+    cliReq.headers['connection'] = cliReq.headers['proxy-connection'];
+    delete cliReq.headers['proxy-connection'];
+    delete cliReq.headers['cache-control'];
+  }
+
   var x = url.parse(cliReq.url);
   //clog('http  : (%d) %s%s', connCount,
   //    x.hostname + ':' + (x.port || 80));
+
+  var reqHeaders = {};
+  if (cliReq.rawHeaders) // if Node > v0.11.*
+    for (var i = 0; i < cliReq.rawHeaders.length; i += 2)
+      reqHeaders[cliReq.rawHeaders[i]] = cliReq.rawHeaders[i + 1];
+  else reqHeaders = cliReq.headers;
+
   var options = {host: x.hostname, port: x.port || 80, path: x.path,
-                 method: cliReq.method, headers: cliReq.headers};
+                 method: cliReq.method, headers: reqHeaders};
+
   var svrReq = http.request(options, function onSvrRes(svrRes) {
     cliRes.writeHead(svrRes.statusCode, svrRes.headers);
     svrRes.pipe(cliRes);
