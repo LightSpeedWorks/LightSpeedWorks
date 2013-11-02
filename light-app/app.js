@@ -23,14 +23,22 @@ app.use(app.router);
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env'))
   app.use(express.errorHandler());
-}
 
-// index
+// app.get /index
 app.get('/', function (req, res) {
-  res.render('index', { title: 'Express (LightSpeedWorks)' });
-});
+  res.render('index', {
+    title: 'Express (LightSpeedWorks)',
+    remoteAddress: req.socket.remoteAddress });
+}); // app.get /index
+
+// app.get /tools/remote-info
+app.get('/tools/remote-info', function (req, res) {
+  res.render('tools-remote-info', {
+    title: 'Express (LightSpeedWorks)',
+    remoteAddress: req.socket.remoteAddress });
+}); // app.get /tools/remote-info
 
 // users
 app.get('/users', function (req, res) {
