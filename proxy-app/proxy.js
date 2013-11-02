@@ -29,15 +29,15 @@ var server = http.createServer(function onCliReq(cliReq, cliRes) {
       reqHeaders[cliReq.rawHeaders[i]] = cliReq.rawHeaders[i + 1];
   else reqHeaders = cliReq.headers;
 
-  if ('Proxy-Connection' in reqHeaders) {
-    delete reqHeaders['Connection'];
-    delete reqHeaders['connection'];
-    reqHeaders['Connection'] = reqHeaders['Proxy-Connection'] || reqHeaders['proxy-connection'];
-    delete reqHeaders['Proxy-Connection'];
-    delete reqHeaders['proxy-connection'];
-    delete reqHeaders['Cache-Control'];
-    delete reqHeaders['cache-control'];
-  }
+  var connection = reqHeaders['Proxy-Connection'] || reqHeaders['proxy-connection'] ||
+                   reqHeaders['Connection'] || reqHeaders['connection'];
+  delete reqHeaders['Connection'];
+  delete reqHeaders['connection'];
+  delete reqHeaders['Proxy-Connection'];
+  delete reqHeaders['proxy-connection'];
+  delete reqHeaders['Cache-Control'];
+  delete reqHeaders['cache-control'];
+  if (connection) reqHeaders['Connection'] = connection;
 
   var options = {host: x.hostname, port: x.port || 80, path: x.path,
                  method: cliReq.method, headers: reqHeaders};
