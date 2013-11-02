@@ -60,15 +60,20 @@ server.on('connect', function onCliConn(cliReq, cliSoc, cliHead) {
   }
 });
 
+clog('Server starting - port ' + HTTP_PORT + ' (' + APP_NAME + ' http proxy)');
 server.listen(HTTP_PORT, function () {
   clog('Server started on port ' + HTTP_PORT + ' (' + APP_NAME + ' http proxy)');
 });
 
-var whiteAddressList = [];
-whiteAddressList['127.0.0.1'] = true;
-whiteAddressList['192.168.251.1'] = true;
-whiteAddressList['59.157.207.17'] = true;
-whiteAddressList['210.170.211.28'] = true;
+var whiteAddressList = {
+  '127.0.0.1': true,       // localhost
+  '192.168.251.1': true,   // vm local
+  // '59.157.207.17': true,
+  // '210.170.211.28': true,
+  '183.181.74.236': true,  // isesaki
+  '36.52.63.193': true,    // sudati
+  '210.152.156.43': true}; // node-ninja lightspeedworks
+
 server.on('connection', function onConn(cliSoc) {
   if (cliSoc.remoteAddress in whiteAddressList) return;
   clog('reject: ', cliSoc.remoteAddress);
