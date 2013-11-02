@@ -23,6 +23,10 @@ global.clog = clog;
 
 
 //######################################################################
+clog('node', process.version, process.arch, process.platform, APP_NAME, __filename);
+
+
+//######################################################################
 // global CONFIG - config file. {設定ファイル}
 if (typeof CONFIG === 'undefined') {
   // CONFIG - config file.

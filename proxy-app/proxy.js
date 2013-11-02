@@ -19,12 +19,6 @@ function printError(err, msg, url) {
 var connCount = 0;
 
 var server = http.createServer(function onCliReq(cliReq, cliRes) {
-  if ('proxy-connection' in cliReq.headers) {
-    cliReq.headers['connection'] = cliReq.headers['proxy-connection'];
-    delete cliReq.headers['proxy-connection'];
-    delete cliReq.headers['cache-control'];
-  }
-
   var x = url.parse(cliReq.url);
   //clog('http  : (%d) %s%s', connCount,
   //    x.hostname + ':' + (x.port || 80));
@@ -34,6 +28,16 @@ var server = http.createServer(function onCliReq(cliReq, cliRes) {
     for (var i = 0; i < cliReq.rawHeaders.length; i += 2)
       reqHeaders[cliReq.rawHeaders[i]] = cliReq.rawHeaders[i + 1];
   else reqHeaders = cliReq.headers;
+
+  if ('Proxy-Connection' in reqHeaders) {
+    delete reqHeaders['Connection'];
+    delete reqHeaders['connection'];
+    reqHeaders['Connection'] = reqHeaders['Proxy-Connection'] || reqHeaders['proxy-connection'];
+    delete reqHeaders['Proxy-Connection'];
+    delete reqHeaders['proxy-connection'];
+    delete reqHeaders['Cache-Control'];
+    delete reqHeaders['cache-control'];
+  }
 
   var options = {host: x.hostname, port: x.port || 80, path: x.path,
                  method: cliReq.method, headers: reqHeaders};
