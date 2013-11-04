@@ -94,6 +94,7 @@ var whiteAddressList = {
   '192.168.251.1': true,   // vm local
   // '59.157.207.17': true,
   // '210.170.211.28': true,
+  // '126.253.114.135': true, // iphone
   '183.181.74.236': true,  // isesaki
   '36.52.63.193': true,    // sudati
   '210.152.156.43': true}; // node-ninja lightspeedworks
