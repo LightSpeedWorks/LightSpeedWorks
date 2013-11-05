@@ -43,7 +43,13 @@ var server = http.createServer(function onCliReq(cliReq, cliRes) {
                  method: cliReq.method, headers: reqHeaders};
 
   var svrReq = http.request(options, function onSvrRes(svrRes) {
-    cliRes.writeHead(svrRes.statusCode, svrRes.headers);
+    var resHeaders = {};
+    if (svrRes.rawHeaders) // if Node > v0.11.*
+      for (var i = 0; i < svrRes.rawHeaders.length; i += 2)
+        resHeaders[svrRes.rawHeaders[i]] = svrRes.rawHeaders[i + 1];
+    else resHeaders = svrRes.headers;
+
+    cliRes.writeHead(svrRes.statusCode, resHeaders);
     svrRes.pipe(cliRes);
   });
   cliReq.pipe(svrReq);
