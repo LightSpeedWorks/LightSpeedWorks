@@ -23,6 +23,13 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
+
+app.use(express.basicAuth(function (user, pass){
+  console.log('user: %s, pass: %s', user, pass);
+  return 'user' === user && 'pass1' === pass;
+  // return true;
+}, 'some message'));
+
 app.use(app.router);
 app.use(express.static(path.resolve(__dirname, '../public')));
 
@@ -96,6 +103,15 @@ app.get('/test/users', users);
 function users(req, res){
   res.send('respond with a resource');
 }
+
+/*
+// auth1
+app.get('/test/auth1',      auth1);
+
+function auth1(req, res){
+  res.send('respond with a resource');
+}
+*/
 
 app.startDateTime = new Date();
 
