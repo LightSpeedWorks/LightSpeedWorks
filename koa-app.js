@@ -55,63 +55,13 @@ clog('worker pid:' + process.pid + ' started (app)');
 
 
 //######################################################################
-// express app
-var express = require('express'); 
-var app = express(); 
+// koa app
+var koa = require('koa');
+var app = koa();
 
-// sub apps
-var testApp =   require('./test-app/app.js').app;
-var localApp =  require('./local-app/app.js').app;
-var lightApp =  require('./light-app/app.js').app;
-var goobooApp = require('./gooboo-app/app.js').app;
-var appApp =    require('./app-app/app.js').app;
-
-// port
-app.set('port', CONFIG.port || process.env.PORT || 3000);
-
-// vhostApps
-var vhostApps = {
-  'localhost': localApp,
-  '127.0.0.1': localApp,
-  'test.lightspeedworks.dev': testApp,
-  'test.lightspeedworks.com': testApp,
-  'app.lightspeedworks.dev': appApp,
-  'app.lightspeedworks.com': appApp,
-  '*.app.lightspeedworks.dev': appApp,
-  '*.app.lightspeedworks.com': appApp,
-  'www.lightspeedworks.dev': lightApp,
-  'www.lightspeedworks.com': lightApp,
-  'lightspeedworks.dev': lightApp,
-  'lightspeedworks.com': lightApp,
-  'www.goo-boo.dev': goobooApp,
-  'www.goo-boo.com': goobooApp,
-  'goo-boo.dev': goobooApp,
-  'goo-boo.com': goobooApp,
-};
-
-for (var host in vhostApps)
-  app.use(express.vhost(host, vhostApps[host]));
-
-app.get('/*', redirect);
-app.post('/*', redirect);
-
-// redirect
-function redirect(req, res, next) {
-  var host = req.headers.host;
-
-  if (vhostApps[host])
-    return next();
-
-  if (host.indexOf('app.lightspeedworks.') > 0)
-    return appApp(req, res, next);
-
-  lightApp(req, res, next);
-}
-
-// listend
-clog('Server starting - port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
-app.listen(app.get('port'), function () {
-  clog('Server started on port ' + app.get('port') + ' (' + APP_NAME + ' Express)');
+app.use(function *(){
+  this.body = 'Hello World';
 });
 
-require('./proxy-app/proxy').proxy(clog, CONFIG, APP_NAME);
+// listen port
+app.listen(CONFIG.port || process.env.PORT || 3000);
