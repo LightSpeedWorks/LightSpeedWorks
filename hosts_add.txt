@@ -1,0 +1,7 @@
+127.0.0.1	test.lightspeedworks.dev
+127.0.0.1	app.lightspeedworks.dev
+127.0.0.1	test.app.lightspeedworks.dev
+127.0.0.1	www.lightspeedworks.dev
+127.0.0.1	lightspeedworks.dev
+127.0.0.1	www.goo-boo.dev
+127.0.0.1	goo-boo.dev
