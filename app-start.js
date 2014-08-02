@@ -5,7 +5,7 @@
 var name = process.argv[2] || 'koa-app';
 
 console.log(['node', process.version, process.arch, process.platform, __filename, name].join(' '));
-console.log('cwd ' + process.cwd());
+console.log('*** cwd ' + process.cwd());
 
 var spawn = require('child_process').spawn;
 

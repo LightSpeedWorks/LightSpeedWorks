@@ -63,6 +63,7 @@ var app = koa();
 
 app.use(function *(){
   this.body = 'Hello World';
+  clog('hello world');
 });
 
 // listen port
