@@ -1,7 +1,7 @@
 {
   "version": "v0.11.10",
   "npm": true,
-  "main": "koa-app.js",
+  "main": "--harmony koa-app.js",
   "args": ["--harmony"],
   "envs": {
     "TZ": "Asia/Tokyo",
