@@ -1,8 +1,8 @@
 {
   "version": "v0.11.10",
   "npm": true,
-  "main": "--harmony koa-app.js",
-  "args": ["--harmony"],
+  "main": "app-start.js",
+  "args": ["koa-app"],
   "envs": {
     "TZ": "Asia/Tokyo",
     "PORT": 80

@@ -6,9 +6,7 @@
     "start": "node app"
   },
   "dependencies": {
-    "koa": ">0.8.1"
-  },
-  "OLD_dependencies": {
+    "koa": ">0.8.1",
     "express": "3.4.0",
     "jade": "*",
     "ejs": "*"
