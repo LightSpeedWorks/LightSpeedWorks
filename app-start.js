@@ -12,6 +12,32 @@ var spawn = require('child_process').spawn;
 var node = process.platform === 'sunos' ? '/home/node/.nvm/v0.11.9/bin/node' : 'node';
 
 //######################################################################
+var procs = {};
+function killAll() {
+  for (var i in procs) {
+    try {
+      procs[i] && process.kill(i, 'SIGHUP');
+    } catch (e) {
+      //console.log(e + '');
+    }
+  }
+}
+
+//######################################################################
+process.on('SIGINT', function() {
+  console.log('Got SIGINT.');
+  killAll();
+});
+process.on('SIGHUP', function() {
+  console.log('Got SIGHUP.');
+  killAll();
+});
+process.on('uncaughtException', function(err) {
+  console.log('Caught exception: ' + err);
+  killAll();
+});
+
+//######################################################################
 setTimeout(function () {
   shellFall(
     //['cmd', '/c', 'dir /b'], // for windows
@@ -42,6 +68,7 @@ function shell(/* cmd, args */) {
   var cb = args.pop();
   var cmd = args.shift();
   var proc = spawn(cmd, args);
+  procs[proc.pid] = proc;
 
   proc.stdout.pipe(process.stdout);
   proc.stderr.pipe(process.stderr);
@@ -53,10 +80,13 @@ function shell(/* cmd, args */) {
     if (called) return;
 
     if (code || signal)
-      msg = 'process exit code: ' + code +
+      msg = 'process exit code: 0x' + (code.toString(16)) +
             (signal ? ' signal: ' + signal : '');
 
     if (--n > 0) return;
+
+    delete procs[proc.pid];
+
     called = true;
     if (msg) return cb(new Error(msg), msg);
     return cb(null, code);
