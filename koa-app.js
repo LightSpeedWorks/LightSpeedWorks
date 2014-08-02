@@ -2,7 +2,7 @@
 
 'use strict';
 
-console.log(['node', process.version, process.arch, process.platform, __filename].join(' '));
+console.log(['*** node', process.version, process.arch, process.platform, __filename].join(' '));
 
 //######################################################################
 // global Application name. {アプリケーション名}
