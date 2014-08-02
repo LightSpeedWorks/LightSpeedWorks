@@ -5,20 +5,20 @@
 var name = process.argv[2] || 'koa-app';
 
 console.log(['node', process.version, process.arch, process.platform, __filename, name].join(' '));
-console.log(process.cwd());
+console.log('cwd ' + process.cwd());
 
 var spawn = require('child_process').spawn;
 
 //######################################################################
 setTimeout(function () {
-  shell('node', '--harmony-generators', name, function (code) {
-  //shell('cmd', '/c', 'dir /b', function (code) {
+  shell('node', '-v', function (code) {
     console.log('*** exited: ' + code);
     shell('node', '--help', function (code) {
       console.log('*** exited: ' + code);
       shell('node', '--v8-options', function (code) {
         console.log('*** exited: ' + code);
-        shell('node', '-v', function (code) {
+        shell('node', '--harmony-generators', name, function (code) {
+        //shell('cmd', '/c', 'dir /b', function (code) {
           console.log('*** exited: ' + code);
         });
       });
