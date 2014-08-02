@@ -5,6 +5,7 @@
 var name = process.argv[2] || 'koa-app';
 
 console.log(['node', process.version, process.arch, process.platform, __filename, name].join(' '));
+console.log(process.cwd());
 
 var spawn = require('child_process').spawn;
 
@@ -16,6 +17,9 @@ shell('node', '--harmony-generators', name, function (code) {
     console.log('*** exited: ' + code);
     shell('node', '--v8-options', function (code) {
       console.log('*** exited: ' + code);
+      setTimeout(function () {
+        console.log('*** exit');
+      }, 10000);
     });
   });
 });
