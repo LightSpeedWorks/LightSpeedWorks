@@ -12,6 +12,7 @@ function printerr(msg) {
 }
 
 //######################################################################
+// kill remain processes
 var pids = [];
 try {
   pids = require(procsFile);
@@ -31,7 +32,7 @@ pids.forEach(function (pid) {
 });
 writeProcsFile([]);
 
-//######################################################################
+//======================================================================
 function writeProcsFile(procs) {
   fs.writeFileSync(procsFile, JSON.stringify(procs) + '\n');
 }
@@ -42,7 +43,8 @@ printerr('*** cwd ' + process.cwd() + '\n');
 
 var spawn = require('child_process').spawn;
 
-var node = process.platform === 'sunos' ? '/home/node/.nvm/v0.11.10/bin/node' : 'node';
+var config = require('./config.json');
+var node = process.platform === 'sunos' ? '/home/node/.nvm/' + config.version + '/bin/node' : 'node';
 
 //######################################################################
 var procs = {};
