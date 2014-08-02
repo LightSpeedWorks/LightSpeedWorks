@@ -10,19 +10,18 @@ console.log(process.cwd());
 var spawn = require('child_process').spawn;
 
 //######################################################################
-shell('node', '--harmony-generators', name, function (code) {
-//shell('cmd', '/c', 'dir /b', function (code) {
-  console.log('*** exited: ' + code);
-  shell('node', '--help', function (code) {
+setTimeout(function () {
+  shell('node', '--harmony-generators', name, function (code) {
+  //shell('cmd', '/c', 'dir /b', function (code) {
     console.log('*** exited: ' + code);
-    shell('node', '--v8-options', function (code) {
+    shell('node', '--help', function (code) {
       console.log('*** exited: ' + code);
-      setTimeout(function () {
-        console.log('*** exit');
-      }, 10000);
+      shell('node', '--v8-options', function (code) {
+        console.log('*** exited: ' + code);
+      });
     });
   });
-});
+}, 10000);
 
 //######################################################################
 function shell() {
