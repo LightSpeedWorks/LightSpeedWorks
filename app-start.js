@@ -9,8 +9,8 @@ console.log(['node', process.version, process.arch, process.platform, __filename
 var spawn = require('child_process').spawn;
 
 //######################################################################
-//shell('node', '--harmony', name, function (code) {
-shell('cmd', '/c', 'dir /b', function (code) {
+shell('node', '--harmony', name, function (code) {
+//shell('cmd', '/c', 'dir /b', function (code) {
   console.log('*** exited: ' + code);
   shell('node', '--help', function (code) {
     console.log('*** exited: ' + code);
