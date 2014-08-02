@@ -2,10 +2,43 @@
 
 'use strict';
 
-var name = process.argv[2] || 'koa-app';
+var fs = require('fs');
+var appName = process.argv[2] || 'koa-app';
+var procsFile = '../procs.json';
 
-console.log(['*** node', process.version, process.arch, process.platform, __filename, name].join(' '));
-console.log('*** cwd ' + process.cwd());
+//######################################################################
+function printerr(msg) {
+  process.stderr.write(msg);
+}
+
+//######################################################################
+var pids = [];
+try {
+  pids = require(procsFile);
+} catch(e) {
+  printerr('*** remain processes does not exist');
+}
+
+//======================================================================
+pids.forEach(function (pid) {
+  printerr('*** kill remain processes pid:' + pid + '\n');
+  try {
+    process.kill(pid, 'SIGHUP');
+    printerr('*** process pid:' + pid + ' killed\n');
+  } catch (e) {
+    printerr('*** process pid:' + pid + ' can not killed: ' + e + '\n');
+  }
+});
+writeProcsFile([]);
+
+//######################################################################
+function writeProcsFile(procs) {
+  fs.writeFileSync(procsFile, JSON.stringify(procs) + '\n');
+}
+
+//######################################################################
+printerr(['*** node', process.version, process.arch, process.platform, __filename, appName].join(' ') + '\n');
+printerr('*** cwd ' + process.cwd() + '\n');
 
 var spawn = require('child_process').spawn;
 
@@ -17,11 +50,12 @@ function killAll() {
   for (var i in procs) {
     try {
       procs[i] && process.kill(i, 'SIGHUP');
-      console.log('*** process pid:' + i + ' killed');
+      printerr('*** process pid:' + i + ' killed\n');
     } catch (e) {
-      console.log('*** process pid:' + i + ' can not killed: ' + e);
+      printerr('*** process pid:' + i + ' can not killed: ' + e + '\n');
     }
   }
+  writeProcsFile([]);
   setTimeout(function() {
     for (var i in procs) {
       try {
@@ -36,19 +70,19 @@ function killAll() {
 
 //######################################################################
 process.on('exit', function(code) {
-  console.log('process exit code: 0x' + (code.toString(16)));
+  printerr('process exit code: 0x' + (code.toString(16)) + '\n');
   killAll();
 });
 process.on('SIGINT', function() {
-  console.log('Got SIGINT.');
+  printerr('Got SIGINT.' + '\n');
   killAll();
 });
 process.on('SIGHUP', function() {
-  console.log('Got SIGHUP.');
+  printerr('Got SIGHUP.' + '\n');
   killAll();
 });
 process.on('uncaughtException', function(err) {
-  console.log('Caught exception: ' + err);
+  printerr('Caught exception: ' + err + '\n');
   killAll();
 });
 
@@ -60,7 +94,7 @@ setTimeout(function () {
     //[node, '-v'],
     //[node, '--help'],
     //[node, '--v8-options'],
-    [node, '--harmony-generators', name]
+    [node, '--harmony-generators', appName]
   );
 }, process.platform === 'sunos' ? 10000 : 1000);
 
@@ -72,7 +106,7 @@ function shellFall() {
   cmd.push(cb);
   shell.apply(null, cmd);
   function cb(err, code) {
-    console.log('*** exited: ' + (err ? err : code));
+    printerr('*** exited: ' + (err ? err : code) + '\n');
     if (args.length > 0) shellFall.apply(null, args);
   }
 }
@@ -84,6 +118,7 @@ function shell(/* cmd, args */) {
   var cmd = args.shift();
   var proc = spawn(cmd, args);
   procs[proc.pid] = proc;
+  writeProcsFile([procs.pid]);
 
   proc.stdout.pipe(process.stdout);
   proc.stderr.pipe(process.stderr);
@@ -101,6 +136,7 @@ function shell(/* cmd, args */) {
     if (--n > 0) return;
 
     delete procs[proc.pid];
+    writeProcsFile([]);
 
     called = true;
     if (msg) return cb(new Error(msg), msg);
