@@ -21,6 +21,16 @@ function killAll() {
       //console.log(e + '');
     }
   }
+  setTimeout(function() {
+    for (var i in procs) {
+      try {
+        procs[i] && process.kill(i);
+      } catch (e) {
+        //console.log(e + '');
+      }
+    }
+    process.kill(process.pid);
+  }, 1000);
 }
 
 //######################################################################
