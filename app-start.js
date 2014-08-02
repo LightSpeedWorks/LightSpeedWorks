@@ -119,6 +119,7 @@ function shell(/* cmd, args */) {
   var cb = args.pop();
   var cmd = args.shift();
   var proc = spawn(cmd, args);
+  printerr('*** spawn pid: ' + proc.pid);
   procs[proc.pid] = proc;
   writeProcsFile([procs.pid]);
 
