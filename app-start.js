@@ -13,15 +13,18 @@ var node = '/home/node/.nvm/v0.11.9/bin/node';
 
 //######################################################################
 setTimeout(function () {
-  shell(node, '-v', function (code) {
+  shell('node', '-v', function (code) {
     console.log('*** exited: ' + code);
-    shell(node, '--help', function (code) {
+    shell(node, '-v', function (code) {
       console.log('*** exited: ' + code);
-      shell(node, '--v8-options', function (code) {
+      shell(node, '--help', function (code) {
         console.log('*** exited: ' + code);
-        shell(node, '--harmony-generators', name, function (code) {
-        //shell('cmd', '/c', 'dir /b', function (code) {
+        shell(node, '--v8-options', function (code) {
           console.log('*** exited: ' + code);
+          shell(node, '--harmony-generators', name, function (code) {
+          //shell('cmd', '/c', 'dir /b', function (code) {
+            console.log('*** exited: ' + code);
+          });
         });
       });
     });
