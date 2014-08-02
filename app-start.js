@@ -3,11 +3,31 @@
 'use strict';
 
 var name = process.argv[2] || 'koa-app';
+
 console.log(['node', process.version, process.arch, process.platform, __filename, name].join(' '));
 
 var spawn = require('child_process').spawn;
-var proc = spawn('node', ['--harmony', name]);
-//var proc = spawn('cmd', ['/c', 'dir /b']);
-proc.stdout.on('data', function (data) { process.stdout.write(data); });
-proc.stderr.on('data', function (data) { process.stderr.write(data); });
-proc.on('close', function (code) { process.stdout.write('*** exited: ' + code + '\n'); });
+
+//######################################################################
+//shell('node', '--harmony', name, function (code) {
+shell('cmd', '/c', 'dir /b', function (code) {
+  console.log('*** exited: ' + code);
+  shell('node', '--help', function (code) {
+    console.log('*** exited: ' + code);
+    shell('node', '--v8-options', function (code) {
+      console.log('*** exited: ' + code);
+    });
+  });
+});
+
+//######################################################################
+function shell() {
+  var args = Array.prototype.slice.call(arguments);
+  var cb = args.pop();
+  var cmd = args.shift();
+  var proc = spawn(cmd, args);
+
+  proc.stdout.pipe(process.stdout);
+  proc.stderr.pipe(process.stderr);
+  proc.on('close', cb);
+}
