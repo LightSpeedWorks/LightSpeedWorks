@@ -9,7 +9,7 @@ console.log('*** cwd ' + process.cwd());
 
 var spawn = require('child_process').spawn;
 
-var node = process.platform === 'sunos' ? '/home/node/.nvm/v0.11.9/bin/node' : 'node';
+var node = process.platform === 'sunos' ? '/home/node/.nvm/v0.11.10/bin/node' : 'node';
 
 //######################################################################
 var procs = {};

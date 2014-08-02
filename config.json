@@ -1,5 +1,5 @@
 {
-  "version": "v0.11.9",
+  "version": "v0.11.10",
   "npm": true,
   "main": "app-start.js",
   "args": ["koa-app"],
