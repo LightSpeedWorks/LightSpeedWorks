@@ -17,8 +17,9 @@ function killAll() {
   for (var i in procs) {
     try {
       procs[i] && process.kill(i, 'SIGHUP');
+      console.log('*** process pid:' + i + ' killed');
     } catch (e) {
-      //console.log(e + '');
+      console.log('*** process pid:' + i + ' can not killed: ' + e);
     }
   }
   setTimeout(function() {
@@ -34,6 +35,10 @@ function killAll() {
 }
 
 //######################################################################
+process.on('exit', function(code) {
+  console.log('process exit code: 0x' + (code.toString(16)));
+  killAll();
+});
 process.on('SIGINT', function() {
   console.log('Got SIGINT.');
   killAll();
