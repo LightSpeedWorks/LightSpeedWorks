@@ -18,6 +18,9 @@ setTimeout(function () {
       console.log('*** exited: ' + code);
       shell('node', '--v8-options', function (code) {
         console.log('*** exited: ' + code);
+        shell('node', '-v', function (code) {
+          console.log('*** exited: ' + code);
+        });
       });
     });
   });
