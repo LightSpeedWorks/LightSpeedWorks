@@ -34,8 +34,8 @@ pids.forEach(function (pid) {
 writeProcsFile([]);
 
 //======================================================================
-function writeProcsFile(procs) {
-  fs.writeFileSync(procsFile, JSON.stringify(procs) + '\n');
+function writeProcsFile(pids) {
+  fs.writeFileSync(procsFile, JSON.stringify(pids) + '\n');
 }
 
 //######################################################################
