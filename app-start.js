@@ -93,8 +93,8 @@ process.on('uncaughtException', function(err) {
 setTimeout(function () {
   shellFall(
     //['cmd', '/c', 'dir /b'], // for windows
-    //['node', '-v'],
-    //[node, '-v'],
+    ['node', '-v'],
+    [node, '-v'],
     //[node, '--help'],
     //[node, '--v8-options'],
     [node, '--harmony-generators', appName]
@@ -121,9 +121,8 @@ function shell(/* cmd, args */) {
   var cmd = args.shift();
   var proc = spawn(cmd, args);
   printerr('*** spawn pid: ' + proc.pid);
-  if (!proc.pid) printerr('*** proc.pid = ' + proc.pid);
   procs[proc.pid] = proc;
-  writeProcsFile([procs.pid]);
+  writeProcsFile([proc.pid]);
 
   proc.stdout.pipe(process.stdout);
   proc.stderr.pipe(process.stderr);
@@ -140,6 +139,7 @@ function shell(/* cmd, args */) {
 
     if (--n > 0) return;
 
+    printerr('*** exit pid: ' + proc.pid);
     delete procs[proc.pid];
     writeProcsFile([]);
 
