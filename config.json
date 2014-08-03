@@ -2,7 +2,7 @@
   "version": "v0.11.10",
   "npm": true,
   "main": "app-start.js",
-  "args": ["koa-app"],
+  "args": ["app"],
   "envs": {
     "TZ": "Asia/Tokyo",
     "PORT": 80
