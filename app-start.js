@@ -23,6 +23,7 @@ try {
 //======================================================================
 pids.forEach(function (pid) {
   printerr('*** kill remain processes pid:' + pid);
+  if (!pid) return;
   try {
     process.kill(pid, 'SIGHUP');
     printerr('*** process pid:' + pid + ' killed');
