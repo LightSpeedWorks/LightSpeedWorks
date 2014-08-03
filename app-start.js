@@ -8,7 +8,7 @@ var procsFile = '../procs.json';
 
 //######################################################################
 function printerr(msg) {
-  process.stderr.write(msg);
+  process.stderr.write(msg + '\n');
 }
 
 //######################################################################
@@ -22,12 +22,12 @@ try {
 
 //======================================================================
 pids.forEach(function (pid) {
-  printerr('*** kill remain processes pid:' + pid + '\n');
+  printerr('*** kill remain processes pid:' + pid);
   try {
     process.kill(pid, 'SIGHUP');
-    printerr('*** process pid:' + pid + ' killed\n');
+    printerr('*** process pid:' + pid + ' killed');
   } catch (e) {
-    printerr('*** process pid:' + pid + ' can not killed: ' + e + '\n');
+    printerr('*** process pid:' + pid + ' can not killed: ' + e);
   }
 });
 writeProcsFile([]);
@@ -38,8 +38,8 @@ function writeProcsFile(procs) {
 }
 
 //######################################################################
-printerr(['*** node', process.version, process.arch, process.platform, __filename, appName].join(' ') + '\n');
-printerr('*** cwd ' + process.cwd() + '\n');
+printerr(['*** node', process.version, process.arch, process.platform, __filename, appName].join(' '));
+printerr('*** cwd ' + process.cwd());
 
 var spawn = require('child_process').spawn;
 
@@ -52,9 +52,9 @@ function killAll() {
   for (var i in procs) {
     try {
       procs[i] && process.kill(i, 'SIGHUP');
-      printerr('*** process pid:' + i + ' killed\n');
+      printerr('*** process pid:' + i + ' killed');
     } catch (e) {
-      printerr('*** process pid:' + i + ' can not killed: ' + e + '\n');
+      printerr('*** process pid:' + i + ' can not killed: ' + e);
     }
   }
   writeProcsFile([]);
@@ -72,19 +72,19 @@ function killAll() {
 
 //######################################################################
 process.on('exit', function(code) {
-  printerr('process exit code: 0x' + (code.toString(16)) + '\n');
+  printerr('process exit code: 0x' + (code.toString(16)));
   killAll();
 });
 process.on('SIGINT', function() {
-  printerr('Got SIGINT.' + '\n');
+  printerr('Got SIGINT.');
   killAll();
 });
 process.on('SIGHUP', function() {
-  printerr('Got SIGHUP.' + '\n');
+  printerr('Got SIGHUP.');
   killAll();
 });
 process.on('uncaughtException', function(err) {
-  printerr('Caught exception: ' + err + '\n');
+  printerr('Caught exception: ' + err);
   killAll();
 });
 
@@ -108,7 +108,7 @@ function shellFall() {
   cmd.push(cb);
   shell.apply(null, cmd);
   function cb(err, code) {
-    printerr('*** exited: ' + (err ? err : code) + '\n');
+    printerr('*** exited: ' + (err ? err : code));
     if (args.length > 0) shellFall.apply(null, args);
   }
 }
@@ -120,6 +120,7 @@ function shell(/* cmd, args */) {
   var cmd = args.shift();
   var proc = spawn(cmd, args);
   printerr('*** spawn pid: ' + proc.pid);
+  if (!proc.pid) printerr('*** proc.pid = ' + proc.pid);
   procs[proc.pid] = proc;
   writeProcsFile([procs.pid]);
 
