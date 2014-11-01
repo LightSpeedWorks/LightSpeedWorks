@@ -99,10 +99,10 @@ app.post('/*', redirect);
 function redirect(req, res, next) {
   var host = req.headers.host;
 
-  if (vhostApps[host])
+  if (host && vhostApps[host])
     return next();
 
-  if (host.indexOf('app.lightspeedworks.') > 0)
+  if (host && host.indexOf('app.lightspeedworks.') > 0)
     return appApp(req, res, next);
 
   lightApp(req, res, next);
