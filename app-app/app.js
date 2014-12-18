@@ -27,6 +27,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var punycode = require('punycode');
+
 // index
 app.get('/*', function (req, res) {
   var name = req.headers.host;
@@ -34,6 +36,7 @@ app.get('/*', function (req, res) {
     name = name.slice(0, name.indexOf('.lightspeedworks.'));
 
   res.render('index', { title: 'Express (' + name + ')',
+    punycode: punycode,
     url:  req.url,
     name: name,
     host: req.headers.host,
