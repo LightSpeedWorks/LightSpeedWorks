@@ -35,7 +35,7 @@ app.get('/*', function (req, res) {
   if (name.indexOf('.lightspeedworks.') > 0)
     name = name.slice(0, name.indexOf('.lightspeedworks.'));
 
-  var name2 = punicode.toUnicode(name);
+  var name2 = punycode.toUnicode(name);
   if (name !== name2)
     name2 = name2 + ' <- ' + name;
 
